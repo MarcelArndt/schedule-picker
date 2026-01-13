@@ -1,0 +1,36 @@
+<div>
+    <div class="head-section">
+        <div class="month"></div>
+        <div class="buttons-section">
+            @if(!currentMonthIsPast){
+                <div (click)="calculatePreviousMonth()">zurück</div>
+                }
+                <div (click)="calculateNextMonth()">weiter</div>
+        </div>
+    </div>
+<table class="date-picker">
+  <thead>
+    <tr>
+      <th>Mo</th>
+      <th>Di</th>
+      <th>Mi</th>
+      <th>Do</th>
+      <th>Fr</th>
+      <th>Sa</th>
+      <th>So</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    @for(week of weeks; track week){
+        <tr>
+            @for(day of week; track day;){
+                <td (click)="day && !currentDayIsPast(day) && toggleDate(day.getDate())" [class.clickable]="day && !currentDayIsPast(day)" [class.active]="day && day.getDate() == selectedDate.day && this.currentMonth == selectedDate.month && this.currentYear == selectedDate.year">
+                {{ day ? day.getDate() : '' }}
+                </td>
+            }
+        </tr>
+    }
+  </tbody>
+</table>
+</div>

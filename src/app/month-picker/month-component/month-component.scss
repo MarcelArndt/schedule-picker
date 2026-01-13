@@ -1,0 +1,51 @@
+.head-section{
+    display: flex;
+}
+
+.buttons-section{
+    display: flex;
+
+    div{
+        box-sizing: border-box;
+        display: flex;
+        padding: 0.25rem 0.5rem;
+        background-color: rgb(176, 176, 176);
+        margin: 0px 1rem;
+        cursor: pointer;
+        &:hover{
+            background-color: rgb(217, 217, 217);
+        }
+    }
+}
+
+.clickable{
+    cursor: pointer;
+    &:hover{
+        background-color: rgb(224, 224, 224);
+    }
+}
+
+.date-picker{
+    td{
+        text-align: center;
+        vertical-align: middle;
+        box-sizing: border-box;
+        padding: 0.25rem clamp(0.5rem, 3.25vw, 5rem);
+        background-color: rgb(36, 36, 36);
+    }
+
+    td.clickable{
+         background-color: rgb(201, 203, 201);
+    }
+
+    td.clickable:hover{
+         background-color: rgb(235, 237, 238);
+    }
+
+    td.active{
+        background-color: rgb(223, 255, 43);
+    }
+    td.active:hover{
+        background-color: rgb(242, 255, 63);
+    }
+}

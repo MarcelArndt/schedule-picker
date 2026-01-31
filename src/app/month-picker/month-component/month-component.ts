@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { DatpickerApiService } from '../../datepicker-api/datpicker-api.service';
 
 interface selectedDate{
     year: number,
@@ -15,9 +16,12 @@ interface selectedDate{
 
 
 export class MonthComponent {
+  apiService = inject(DatpickerApiService)
+
   currentYear = 2020;
   currentMonth = 0; // 0 = Januar, 11 = Dezember
   currentDay = 0;
+  
   systemMonth = new Date().getMonth();
   systemDay = new Date().getDate();
   selectedDate:selectedDate = {
@@ -27,18 +31,22 @@ export class MonthComponent {
   };
 
   weeks: (Date | null)[][] = [];
+  monthTitles = ["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"]
 
-  ngOnInit() {
+ async ngOnInit() {
     this.getCurrentDate();
     this.generateCalendar(this.currentYear, this.currentMonth);
+    await this.apiService.getAllData()
   }
 
   calculatePreviousMonth(){
+    this.currentYear = this.currentMonth - 1 < 0? this.currentYear - 1 : this.currentYear
     this.currentMonth = this.currentMonth - 1 < 0? 11 : this.currentMonth - 1;
     this.generateCalendar(this.currentYear, this.currentMonth);
   }
 
   calculateNextMonth(){
+    this.currentYear = this.currentMonth + 1 > 11? this.currentYear + 1 : this.currentYear
     this.currentMonth = this.currentMonth + 1 > 11? 0 : this.currentMonth + 1;
     this.generateCalendar(this.currentYear, this.currentMonth);
   }
@@ -56,31 +64,50 @@ export class MonthComponent {
     console.log(this.selectedDate);
   }
 
+  get year(){
+    return this.currentYear
+  }
+
+  get month():number{
+    return this.systemMonth 
+  }
+
+  get currentYearIsPast(){
+    return this.currentYear > new Date().getFullYear()
+  }
+
   get currentMonthIsPast():boolean{
-    if (this.currentYear >= new Date().getFullYear() && this.currentMonth > new Date().getMonth()){
+    if(this.currentYearIsPast){
+      return false;
+    }
+    if (this.currentMonth > new Date().getMonth()){
       return false;
     }
     return true;
   }
 
+  get currentMonthTitle(){
+    return this.monthTitles[this.currentMonth]
+  }
+
   currentDayIsPast(day: Date): boolean {
     const checkCurrentYear:boolean = this.currentYear == new Date().getFullYear();
     const checkCurrentMonth:boolean = this.currentMonth == new Date().getMonth();
+    const checkCurrentDay :boolean = day.getDate() >= new Date().getDate()
+
+    if(this.currentYearIsPast){
+      return false
+    }
 
     if(this.currentMonth > new Date().getMonth() && this.currentYear >= new Date().getFullYear()){
       return false
     }
 
-    const checkCurrentDay :boolean = day.getDate() >= new Date().getDate()
     if(checkCurrentYear && checkCurrentMonth && checkCurrentDay){
       return false
     }
 
     return true
-  }
-
-  get month():number{
-    return this.systemMonth 
   }
 
   generateCalendar(year: number, month: number) {

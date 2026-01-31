@@ -1,5 +1,14 @@
 .head-section{
     display: flex;
+    flex-direction: column;
+}
+
+.title{
+    display: flex;
+
+    .month{
+        margin-right: 1rem;
+    }
 }
 
 .buttons-section{
